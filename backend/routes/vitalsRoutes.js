@@ -27,7 +27,8 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Invalid userId' });
     }
 
-    let vitals = await Vitals.findOne({ userId });
+    const parsedUserId = new mongoose.Types.ObjectId(userId);
+    let vitals = await Vitals.findOne({ userId: parsedUserId });
     
     if (vitals) {
       // Update existing record
@@ -50,7 +51,7 @@ router.post('/', async (req, res) => {
     } else {
       // Create new record if it doesn't exist
       const newVitals = new Vitals({
-        userId,
+        userId: parsedUserId,
         heartRate,
         bloodPressure,
         spO2,
